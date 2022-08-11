@@ -7,6 +7,7 @@ namespace ABCFoodCatering.Models
 {
     public class Order
     {
+        //public
         // aaaaaa
     }
 }
