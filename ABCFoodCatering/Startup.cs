@@ -5,13 +5,16 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
 using ABCFoodCatering.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace ABCFoodCatering
 {
@@ -24,6 +27,46 @@ namespace ABCFoodCatering
 
         public IConfiguration Configuration { get; }
 
+        // Method to create roles
+        private async Task CreateRoles(IServiceProvider serviceProvider)
+        {
+            // Add Custom roles
+            var RoleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var UserManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
+            string[] roleNames = { "Admin", "Client", "Member" };
+            IdentityResult roleResult;
+            foreach (var roleName in roleNames)
+            {
+                // Create role and seed them to database
+                var roleExist = await RoleManager.RoleExistsAsync(roleName);
+                if (!roleExist)
+                {
+                    roleResult = await RoleManager.CreateAsync(new IdentityRole(roleName));
+                }
+            }
+
+            // Create (Client) user
+            var clientuser = new IdentityUser
+            {
+                UserName = Configuration.GetSection("UserSettings")["UserEmail"],
+                Email = Configuration.GetSection("UserSettings")["UserEmail"]
+            };
+            /*"UserSettings": {
+                "UserEmail": "User@email.com",
+                "UserPassword": "Password"
+            }*/
+            string UserPass = Configuration.GetSection("UserSettings")["UserPassword"];
+            var _user = await UserManager.FindByEmailAsync(Configuration.GetSection("UserSettings")["UserEmail"]);
+            if (_user == null)
+            {
+                var createClientUser = await UserManager.CreateAsync(clientuser, UserPass);
+                if (createClientUser.Succeeded)
+                {
+                    await UserManager.AddToRoleAsync(clientuser, "Client");
+                }
+            }
+        }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
@@ -31,10 +74,18 @@ namespace ABCFoodCatering
 
             services.AddDbContext<ApplicationDbContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("ApplicationDbContext")));
+
+            services.AddDefaultIdentity<IdentityUser>().AddRoles<IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.AddMvc(cfg =>
+            {
+                var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+                cfg.Filters.Add(new AuthorizeFilter(policy));
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
@@ -49,6 +100,7 @@ namespace ABCFoodCatering
             app.UseStaticFiles();
             app.UseAuthentication();
             app.UseMvc();
+            CreateRoles(serviceProvider).Wait();
         }
     }
 }
