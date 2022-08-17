@@ -48,21 +48,36 @@ namespace ABCFoodCatering
             // Create (Client) user
             var clientuser = new IdentityUser
             {
-                UserName = Configuration.GetSection("UserSettings")["UserEmail"],
-                Email = Configuration.GetSection("UserSettings")["UserEmail"]
+                UserName = Configuration.GetSection("UserSettings")["ClientEmail"],
+                Email = Configuration.GetSection("UserSettings")["ClientEmail"]
             };
-            /*"UserSettings": {
-                "UserEmail": "User@email.com",
-                "UserPassword": "Password"
-            }*/
-            string UserPass = Configuration.GetSection("UserSettings")["UserPassword"];
-            var _user = await UserManager.FindByEmailAsync(Configuration.GetSection("UserSettings")["UserEmail"]);
+            
+            string UserPass = Configuration.GetSection("UserSettings")["ClientPassword"];
+            var _user = await UserManager.FindByEmailAsync(Configuration.GetSection("UserSettings")["ClientEmail"]);
             if (_user == null)
             {
                 var createClientUser = await UserManager.CreateAsync(clientuser, UserPass);
                 if (createClientUser.Succeeded)
                 {
                     await UserManager.AddToRoleAsync(clientuser, "Client");
+                }
+            }
+
+            // Create superuser (Admin) to have full access
+            var superuser = new IdentityUser
+            {
+                UserName = Configuration.GetSection("UserSettings")["AdminEmail"],
+                Email = Configuration.GetSection("UserSettings")["AdminEmail"]
+            };
+
+            string AdminPass = Configuration.GetSection("UserSettings")["AdminPassword"];
+            var _admin = await UserManager.FindByEmailAsync(Configuration.GetSection("UserSettings")["AdminEmail"]);
+            if (_admin == null)
+            {
+                var createAdminUser = await UserManager.CreateAsync(superuser, UserPass);
+                if (createAdminUser.Succeeded)
+                {
+                    await UserManager.AddToRoleAsync(superuser, "Admin");
                 }
             }
         }
