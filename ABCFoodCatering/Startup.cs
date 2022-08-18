@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -13,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using ABCFoodCatering.Models;
 using Microsoft.AspNetCore.Identity;
 
@@ -33,7 +36,7 @@ namespace ABCFoodCatering
             // Add Custom roles
             var RoleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
             var UserManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
-            string[] roleNames = { "Admin", "Client", "Member" };
+            string[] roleNames = { "Client", "Member" };
             IdentityResult roleResult;
             foreach (var roleName in roleNames)
             {
@@ -45,6 +48,24 @@ namespace ABCFoodCatering
                 }
             }
 
+            // Create (Member) user
+            var memberuser = new IdentityUser
+            {
+                UserName = Configuration.GetSection("UserSettings")["MemberEmail"],
+                Email = Configuration.GetSection("UserSettings")["MemberEmail"]
+            };
+
+            string MemberPass = Configuration.GetSection("UserSettings")["MemberPassword"];
+            var _member = await UserManager.FindByEmailAsync(Configuration.GetSection("UserSettings")["MemberEmail"]);
+            if (_member == null)
+            {
+                var createMemberUser = await UserManager.CreateAsync(memberuser, MemberPass);
+                if (createMemberUser.Succeeded)
+                {
+                    await UserManager.AddToRoleAsync(memberuser, "Member");
+                }
+            }
+
             // Create (Client) user
             var clientuser = new IdentityUser
             {
@@ -52,11 +73,11 @@ namespace ABCFoodCatering
                 Email = Configuration.GetSection("UserSettings")["ClientEmail"]
             };
             
-            string UserPass = Configuration.GetSection("UserSettings")["ClientPassword"];
-            var _user = await UserManager.FindByEmailAsync(Configuration.GetSection("UserSettings")["ClientEmail"]);
-            if (_user == null)
+            string ClientPass = Configuration.GetSection("UserSettings")["ClientPassword"];
+            var _client = await UserManager.FindByEmailAsync(Configuration.GetSection("UserSettings")["ClientEmail"]);
+            if (_client == null)
             {
-                var createClientUser = await UserManager.CreateAsync(clientuser, UserPass);
+                var createClientUser = await UserManager.CreateAsync(clientuser, ClientPass);
                 if (createClientUser.Succeeded)
                 {
                     await UserManager.AddToRoleAsync(clientuser, "Client");
@@ -64,7 +85,8 @@ namespace ABCFoodCatering
             }
 
             // Create superuser (Admin) to have full access
-            var superuser = new IdentityUser
+            // NOT NEEDED AS ADMIN IS ABLE TO DO / VIEW EVERYTHING INCLUDING THE DETAILS IN THE DATABASE.
+            /*var superuser = new IdentityUser
             {
                 UserName = Configuration.GetSection("UserSettings")["AdminEmail"],
                 Email = Configuration.GetSection("UserSettings")["AdminEmail"]
@@ -74,12 +96,12 @@ namespace ABCFoodCatering
             var _admin = await UserManager.FindByEmailAsync(Configuration.GetSection("UserSettings")["AdminEmail"]);
             if (_admin == null)
             {
-                var createAdminUser = await UserManager.CreateAsync(superuser, UserPass);
+                var createAdminUser = await UserManager.CreateAsync(superuser, AdminPass);
                 if (createAdminUser.Succeeded)
                 {
                     await UserManager.AddToRoleAsync(superuser, "Admin");
                 }
-            }
+            }*/
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -91,6 +113,30 @@ namespace ABCFoodCatering
                     options.UseSqlServer(Configuration.GetConnectionString("ApplicationDbContext")));
 
             services.AddDefaultIdentity<IdentityUser>().AddRoles<IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.AddAuthentication(opts =>
+            {
+                // Add default auth scheme and JWT auth type with standard setting
+                opts.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                opts.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                opts.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(cfg =>
+            {
+                cfg.RequireHttpsMetadata = false;
+                cfg.SaveToken = true;
+                cfg.IncludeErrorDetails = true;
+                cfg.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidIssuer = Configuration["Auth:Jwt:Issuer"],
+                    ValidAudience = Configuration["Auth:Jwt:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Äuth:Jwt:Key"])),
+                    ClockSkew = TimeSpan.Zero,
+                    RequireExpirationTime = true,
+                    ValidateIssuer = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidateAudience = true
+                };
+            });
 
             services.AddMvc(cfg =>
             {
