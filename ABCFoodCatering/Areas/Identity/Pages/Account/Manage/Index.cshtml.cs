@@ -4,6 +4,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +14,10 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace ABCFoodCatering.Areas.Identity.Pages.Account.Manage
 {
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Client")]
+    //[Authorize(Roles = "Client")]
+    //[Authorize]
+    //[AllowAnonymous]
     public partial class IndexModel : PageModel
     {
         private readonly UserManager<IdentityUser> _userManager;

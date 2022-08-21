@@ -84,8 +84,10 @@ namespace ABCFoodCatering.Areas.Identity.Pages.Account
                         $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
                     // Add (Client) User
-                    await _userManager.AddToRoleAsync(user, "Client");
-                    await _userManager.AddClaimAsync(user, new Claim(ClaimTypes.Role, "Client"));
+                    await _userManager.AddToRoleAsync(user, "Member");
+                    await _userManager.AddClaimAsync(user, new Claim(ClaimTypes.Role, "Member"));
+
+                    // Code to show dropdown list goes here i think
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     return LocalRedirect(returnUrl);

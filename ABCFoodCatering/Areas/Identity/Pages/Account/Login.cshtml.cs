@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -65,10 +66,12 @@ namespace ABCFoodCatering.Areas.Identity.Pages.Account
             ReturnUrl = returnUrl;
         }
 
+        //[HttpPost]
+        //[Authorize(Roles = "Client")]
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl = returnUrl ?? Url.Content("~/Identity/Account/Manage");
-
+    
             if (ModelState.IsValid)
             {
                 // This doesn't count login failures towards account lockout
@@ -77,6 +80,7 @@ namespace ABCFoodCatering.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
+                    
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)

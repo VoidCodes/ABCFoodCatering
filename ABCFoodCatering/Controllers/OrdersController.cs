@@ -10,10 +10,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ABCFoodCatering.Models
 {
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Client")]
+
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Client")]
+    [Authorize(Roles = "Client")]
+    [AllowAnonymous]
     [Route("api/[controller]")]
     [ApiController]
-    public class OrdersController : ControllerBase
+    public class OrdersController : Controller
     {
         private readonly ApplicationDbContext _context;
 
@@ -22,7 +25,7 @@ namespace ABCFoodCatering.Models
             _context = context;
         }
 
-        // GET: api/Orders
+        // GET: api/Orders [Get ALL Orders]
         [HttpGet]
         public IEnumerable<Order> GetOrder()
         {

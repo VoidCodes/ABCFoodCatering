@@ -2,7 +2,30 @@
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
 
-@if (SignInManager.IsSignedIn(User))
+@{
+    //bool isUserAuthenticated = User.Identity.IsAuthenticated;
+}
+
+@if (SignInManager.IsSignedIn(User) && User.IsInRole("Client"))
+{
+    
+    ViewData["Title"] = "Profile";
+    
+    <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })" method="post" id="logoutForm" class="navbar-right">
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                <a asp-area="Identity" asp-page="/Account/Orders/ManageOrders" title="Manage Orders">Manage Orders</a>
+            </li>
+            <li>
+                <a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
+            </li>
+            <li>
+                <button type="submit" class="btn btn-link navbar-btn navbar-link">Logout</button>
+            </li>
+        </ul>
+    </form>
+}
+else if (SignInManager.IsSignedIn(User) && User.IsInRole("Member"))
 {
     <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })" method="post" id="logoutForm" class="navbar-right">
         <ul class="nav navbar-nav navbar-right">
@@ -15,7 +38,7 @@
         </ul>
     </form>
 }
-else
+else if (!SignInManager.IsSignedIn(User))
 {
     <ul class="nav navbar-nav navbar-right">
         <li><a asp-area="Identity" asp-page="/Account/Register">Register</a></li>

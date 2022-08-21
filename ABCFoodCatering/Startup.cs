@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -66,7 +67,7 @@ namespace ABCFoodCatering
                 }
             }
 
-            // Create (Client) user
+            // Create (Client) user -- This user is allowed to do CRUD Ops and access the api
             var clientuser = new IdentityUser
             {
                 UserName = Configuration.GetSection("UserSettings")["ClientEmail"],
@@ -83,25 +84,6 @@ namespace ABCFoodCatering
                     await UserManager.AddToRoleAsync(clientuser, "Client");
                 }
             }
-
-            // Create superuser (Admin) to have full access
-            // NOT NEEDED AS ADMIN IS ABLE TO DO / VIEW EVERYTHING INCLUDING THE DETAILS IN THE DATABASE.
-            /*var superuser = new IdentityUser
-            {
-                UserName = Configuration.GetSection("UserSettings")["AdminEmail"],
-                Email = Configuration.GetSection("UserSettings")["AdminEmail"]
-            };
-
-            string AdminPass = Configuration.GetSection("UserSettings")["AdminPassword"];
-            var _admin = await UserManager.FindByEmailAsync(Configuration.GetSection("UserSettings")["AdminEmail"]);
-            if (_admin == null)
-            {
-                var createAdminUser = await UserManager.CreateAsync(superuser, AdminPass);
-                if (createAdminUser.Succeeded)
-                {
-                    await UserManager.AddToRoleAsync(superuser, "Admin");
-                }
-            }*/
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -114,12 +96,15 @@ namespace ABCFoodCatering
 
             services.AddDefaultIdentity<IdentityUser>().AddRoles<IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
 
+            services.Configure<JWTSettings>(Configuration.GetSection("JwtSettings"));
+
             services.AddAuthentication(opts =>
             {
                 // Add default auth scheme and JWT auth type with standard setting
-                opts.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                // The code below causes authentication issues
+                /*opts.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                 opts.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                opts.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                opts.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;*/
             }).AddJwtBearer(cfg =>
             {
                 cfg.RequireHttpsMetadata = false;
@@ -127,9 +112,9 @@ namespace ABCFoodCatering
                 cfg.IncludeErrorDetails = true;
                 cfg.TokenValidationParameters = new TokenValidationParameters()
                 {
-                    ValidIssuer = Configuration["Auth:Jwt:Issuer"],
-                    ValidAudience = Configuration["Auth:Jwt:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Äuth:Jwt:Key"])),
+                    ValidIssuer = Configuration["JwtSettings:Issuer"],
+                    ValidAudience = Configuration["JwtSettings:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtSettings:Key"])),
                     ClockSkew = TimeSpan.Zero,
                     RequireExpirationTime = true,
                     ValidateIssuer = true,
@@ -148,6 +133,7 @@ namespace ABCFoodCatering
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
         {
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -155,11 +141,28 @@ namespace ABCFoodCatering
             else
             {
                 app.UseHsts();
-            }
+            };
+
+            // Use custom HTTP error page message
+            /*app.UseStatusCodePages(async ctx =>
+            {
+                if (ctx.HttpContext.Response.StatusCode == 401)
+                {
+                    //var role = RoleManager.FindByNameAsync("Client");
+                    await ctx.HttpContext.Response.WriteAsync("HTTP 401 ERROR: Authorization Failed");
+                }
+            });*/
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+            /*app.UseCors(x => x
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader());*/
+
             app.UseAuthentication();
+            //app.UseAuthorization();
             app.UseMvc();
             CreateRoles(serviceProvider).Wait();
         }
