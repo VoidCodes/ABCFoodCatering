@@ -29,7 +29,8 @@ namespace ABCFoodCatering.Models
         [HttpGet]
         public IEnumerable<Order> GetOrder()
         {
-            return _context.Order;
+            //return _context.Order;
+            return _context.Order.ToList();
         }
 
         // GET: api/Orders/5
