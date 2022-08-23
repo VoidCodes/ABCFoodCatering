@@ -1,17 +1,18 @@
 ﻿@page
-@model ABCFoodCatering.Areas.Identity.Pages.Account.Orders.EditModel
+@model ABCFoodCatering.Areas.Identity.Pages.Account.PlaceOrderModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "PlaceOrder";
 }
 
-<h2>Edit Order Details</h2>
+<h2>PlaceOrder</h2>
+
+<h4>Order</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Order.OrderID" />
             <div class="form-group">
                 <label asp-for="Order.FoodDescription" class="control-label"></label>
                 <input asp-for="Order.FoodDescription" class="form-control" />
@@ -47,22 +48,22 @@
                 <input asp-for="Order.OrderDate" class="form-control" />
                 <span asp-validation-for="Order.OrderDate" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <!---<div class="form-group">
                 <div class="checkbox">
                     <label>
-                        <input asp-for="Order.orderCompleted" />@Html.DisplayNameFor(model => model.Order.orderCompleted)
+                        <input asp-for="Order.orderCompleted" />@* @Html.DisplayNameFor(model => model.orderCompleted)*@)
                     </label>
                 </div>
-            </div>
+            </div>-->
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Create" class="btn btn-default" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-page="./Index">Back to List</a>
+    <a asp-page="View Orders">Back to List</a>
 </div>
 
 @section Scripts {

@@ -5,9 +5,8 @@
     ViewData["Title"] = "Create";
 }
 
-<h2>Create</h2>
+<h2>Create New Order</h2>
 
-<h4>Order</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -29,8 +28,9 @@
                 <span asp-validation-for="Order.DeliveryDate" class="text-danger"></span>
             </div>
             <div class="form-group">
+                @* @Html. *@
                 <label asp-for="Order.DeliveryTime" class="control-label"></label>
-                <input asp-for="Order.DeliveryTime" class="form-control" />
+                <input asp-for="Order.DeliveryTime" asp-format="{0:dd/MM/yyyy HH:mm}" class="form-control" />
                 <span asp-validation-for="Order.DeliveryTime" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -51,12 +51,12 @@
             <div class="form-group">
                 <div class="checkbox">
                     <label>
-                        <input asp-for="Order.orderCompleted" /> @Html.DisplayNameFor(model => model.Order.orderCompleted))
+                        <input asp-for="Order.orderCompleted" /> @Html.DisplayNameFor(model => model.Order.orderCompleted)
                     </label>
                 </div>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
     </div>

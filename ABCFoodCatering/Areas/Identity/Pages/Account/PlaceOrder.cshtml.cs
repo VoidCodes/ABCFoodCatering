@@ -6,20 +6,18 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using ABCFoodCatering.Models;
-using Microsoft.AspNetCore.Authorization;
 
-namespace ABCFoodCatering.Areas.Identity.Pages.Account.Orders
+namespace ABCFoodCatering.Areas.Identity.Pages.Account
 {
-    public class CreateModel : PageModel
+    public class PlaceOrderModel : PageModel
     {
         private readonly ABCFoodCatering.Models.ApplicationDbContext _context;
 
-        public CreateModel(ABCFoodCatering.Models.ApplicationDbContext context)
+        public PlaceOrderModel(ABCFoodCatering.Models.ApplicationDbContext context)
         {
             _context = context;
         }
 
-        [Authorize(Roles = "Client")]
         public IActionResult OnGet()
         {
             return Page();

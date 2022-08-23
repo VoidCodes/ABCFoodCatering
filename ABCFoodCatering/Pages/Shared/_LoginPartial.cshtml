@@ -25,10 +25,13 @@
         </ul>
     </form>
 }
-else if (SignInManager.IsSignedIn(User) /*&& User.IsInRole("Admin")*/)
+else if (SignInManager.IsSignedIn(User) && User.IsInRole("Member"))
 {
     <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })" method="post" id="logoutForm" class="navbar-right">
         <ul class="nav navbar-nav navbar-right">
+            <li>
+                <a asp-area="Identity" asp-page="/Account/ViewOrders" title="View Orders">View Orders</a>
+            </li>
             <li>
                 <a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
             </li>
@@ -38,10 +41,14 @@ else if (SignInManager.IsSignedIn(User) /*&& User.IsInRole("Admin")*/)
         </ul>
     </form>
 }
-else if (SignInManager.IsSignedIn(User) && User.IsInRole("Member"))
+else if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
 {
     <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })" method="post" id="logoutForm" class="navbar-right">
         <ul class="nav navbar-nav navbar-right">
+            <li>
+                <a asp-area="Identity" asp-page="/Account/ViewAccounts" title="Manage Accounts">Manage Accounts</a>
+            </li>
+            <li>
             <li>
                 <a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
             </li>

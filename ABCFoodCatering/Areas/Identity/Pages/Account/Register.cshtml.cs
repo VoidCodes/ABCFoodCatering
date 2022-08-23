@@ -83,7 +83,7 @@ namespace ABCFoodCatering.Areas.Identity.Pages.Account
                     await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
                         $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
-                    // Add (Client) User
+                    // Add (Member) User
                     await _userManager.AddToRoleAsync(user, "Member");
                     await _userManager.AddClaimAsync(user, new Claim(ClaimTypes.Role, "Member"));
 

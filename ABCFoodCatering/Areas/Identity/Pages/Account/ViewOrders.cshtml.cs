@@ -6,22 +6,20 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using ABCFoodCatering.Models;
-using Microsoft.AspNetCore.Authorization;
 
-namespace ABCFoodCatering.Areas.Identity.Pages.Account.Orders
+namespace ABCFoodCatering.Areas.Identity.Pages.Account
 {
-    public class IndexModel : PageModel
+    public class ViewOrdersModel : PageModel
     {
         private readonly ABCFoodCatering.Models.ApplicationDbContext _context;
 
-        public IndexModel(ABCFoodCatering.Models.ApplicationDbContext context)
+        public ViewOrdersModel(ABCFoodCatering.Models.ApplicationDbContext context)
         {
             _context = context;
         }
 
         public IList<Order> Order { get;set; }
 
-        [Authorize(Roles = "Client")]
         public async Task OnGetAsync()
         {
             Order = await _context.Order.ToListAsync();
