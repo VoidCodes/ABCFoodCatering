@@ -1,0 +1,67 @@
+﻿@page
+@model ABCFoodCatering.Areas.Identity.Pages.Account.Orders.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Order</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Order.FoodDescription)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Order.FoodDescription)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Order.DeliveryAddress)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Order.DeliveryAddress)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Order.DeliveryDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Order.DeliveryDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Order.DeliveryTime)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Order.DeliveryTime)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Order.Quantity)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Order.Quantity)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Order.ClientName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Order.ClientName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Order.OrderDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Order.OrderDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Order.orderCompleted)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Order.orderCompleted)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.Order.OrderID">Edit</a> |
+    <a asp-page="./Index">Back to List</a>
+</div>

@@ -37,7 +37,7 @@ namespace ABCFoodCatering
             // Add Custom roles
             var RoleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
             var UserManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
-            string[] roleNames = { "Client", "Member" };
+            string[] roleNames = { "Client", "Member", "Admin" };
             IdentityResult roleResult;
             foreach (var roleName in roleNames)
             {
@@ -84,7 +84,27 @@ namespace ABCFoodCatering
                     await UserManager.AddToRoleAsync(clientuser, "Client");
                 }
             }
+
+            // Create (Admin) user -- This user is allowed to do EVERYTHING
+            var superuser = new IdentityUser
+            {
+                UserName = Configuration.GetSection("UserSettings")["AdminEmail"],
+                Email = Configuration.GetSection("UserSettings")["AdminEmail"]
+            };
+            
+            string AdminPass = Configuration.GetSection("UserSettings")["AdminPassword"];
+            var _admin = await UserManager.FindByEmailAsync(Configuration.GetSection("UserSettings")["AdminEmail"]);
+            if (_admin == null)
+            {
+                var createAdminUser = await UserManager.CreateAsync(superuser, AdminPass);
+                if (createAdminUser.Succeeded)
+                {
+                    await UserManager.AddToRoleAsync(superuser, "Admin");
+                }
+            }
         }
+
+
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)

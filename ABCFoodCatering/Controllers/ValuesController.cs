@@ -10,6 +10,7 @@ namespace ABCFoodCatering.Controllers
 {
     //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Client")]
     [Authorize(Roles = "Client")]
+    //[Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class ValuesController : ControllerBase

@@ -22,5 +22,6 @@ namespace ABCFoodCatering.Models
         public string ClientName { get; set; }
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd}")]
         public DateTime OrderDate { get; set; }
+        public bool orderCompleted { get; set; }
     }
 }

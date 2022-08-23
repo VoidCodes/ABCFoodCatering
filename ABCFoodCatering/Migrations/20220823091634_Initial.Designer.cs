@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ABCFoodCatering.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220811145605_CreateIdentitySchema")]
-    partial class CreateIdentitySchema
+    [Migration("20220823091634_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -41,6 +41,8 @@ namespace ABCFoodCatering.Migrations
                     b.Property<DateTime>("OrderDate");
 
                     b.Property<int>("Quantity");
+
+                    b.Property<bool>("orderCompleted");
 
                     b.HasKey("OrderID");
 
@@ -164,9 +166,11 @@ namespace ABCFoodCatering.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.Property<string>("LoginProvider");
+                    b.Property<string>("LoginProvider")
+                        .HasMaxLength(128);
 
-                    b.Property<string>("ProviderKey");
+                    b.Property<string>("ProviderKey")
+                        .HasMaxLength(128);
 
                     b.Property<string>("ProviderDisplayName");
 
@@ -197,9 +201,11 @@ namespace ABCFoodCatering.Migrations
                 {
                     b.Property<string>("UserId");
 
-                    b.Property<string>("LoginProvider");
+                    b.Property<string>("LoginProvider")
+                        .HasMaxLength(128);
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasMaxLength(128);
 
                     b.Property<string>("Value");
 
