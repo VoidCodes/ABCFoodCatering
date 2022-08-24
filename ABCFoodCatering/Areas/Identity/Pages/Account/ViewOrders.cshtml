@@ -8,7 +8,7 @@
 <h2>My Orders</h2>
 
 <p>
-    <a asp-page="PlaceOrder">Place Order</a>
+    <a asp-page="PlaceOrder" class="btn btn-success">Place Order</a>
 </p>
 <table class="table">
     <thead>
@@ -68,9 +68,18 @@
                 @Html.DisplayFor(modelItem => item.orderCompleted)
             </td>
             <td>
-                <a asp-page="./Edit" asp-route-id="@item.OrderID">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.OrderID">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.OrderID">Delete</a>
+                @if (item.orderCompleted == true)
+                {
+                    <a asp-page="./EditOrder" asp-route-id="@item.OrderID" style="display:none">Edit</a>
+                    <a asp-page="./Details" asp-route-id="@item.OrderID">Details</a>
+                    <a asp-page="./Delete" asp-route-id="@item.OrderID" style="display:none">Delete</a>
+                }
+                else
+                {
+                    <a asp-page="./EditOrder" asp-route-id="@item.OrderID" class="btn btn-warning">Edit</a>
+                    <a asp-page="./Details" asp-route-id="@item.OrderID">Details</a>
+                    <a asp-page="./Delete" asp-route-id="@item.OrderID">Delete</a>
+                }
             </td>
         </tr>
 }

@@ -60,6 +60,14 @@
     </dl>
 </div>
 <div>
-    <a asp-page="./Edit" asp-route-id="@Model.Order.OrderID" class="btn btn-warning">Edit</a> 
-    <a asp-page="./Index" class="btn btn-info">Back to List</a>
+    @if (Model.Order.orderCompleted == true)
+    {
+        <a asp-page="./Edit" asp-route-id="@Model.Order.OrderID" class="btn btn-warning" style="display:none">Edit</a>
+        <a asp-page="./Index" class="btn btn-info">Back to List</a>
+    }
+    else
+    {
+        <a asp-page="./Edit" asp-route-id="@Model.Order.OrderID" class="btn btn-warning">Edit</a>
+        <a asp-page="./Index" class="btn btn-info">Back to List</a>
+    }
 </div>
