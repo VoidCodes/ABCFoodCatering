@@ -1,12 +1,11 @@
 ﻿@page
-@model ABCFoodCatering.Areas.Identity.Pages.Account.Orders.DeleteModel
+@model ABCFoodCatering.Areas.Identity.Pages.Account.OrderDeetailsModel
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "OrderDeetails";
 }
 
-<h2>Are you sure you want to delete this order?</h2>
-
+<h2>Summary of your order</h2>
 
 <div>
     <hr />
@@ -60,10 +59,7 @@
             @Html.DisplayFor(model => model.Order.orderCompleted)
         </dd>
     </dl>
-    
-    <form method="post">
-        <input type="hidden" asp-for="Order.OrderID" />
-        <input type="submit" value="Delete Order" class="btn btn-danger" /> 
-        <a asp-page="./Index" class="btn btn-info">Return Home</a>
-    </form>
+</div>
+<div>
+    <a asp-page="./ViewOrders" class="btn btn-info">Return Home</a>
 </div>

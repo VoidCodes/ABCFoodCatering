@@ -1,0 +1,32 @@
+﻿@page
+@*model ABCFoodCatering.Areas.Identity.Pages.Account.ViewRolesModel*@
+@*@model IEnumerable<IdentityRole>*@
+@{
+    ViewData["Title"] = "View Roles";
+}
+
+<h2>View Roles</h2>
+<hr />
+@*@if (Model.Any())
+{
+    foreach (var role in Model)
+    {
+        <div class="panel">
+            <div class="panel-heading">
+                Role Id: @role.Id
+            </div>
+            <div class="panel-body">
+                <h4 class="panel-title">@role.Name</h4>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <div class="panel panel-info">
+        <div class="panel-heading">No Roles Created</div>
+        <div class="panel-body">
+            <a class="btn bg-primary" >Create Role</a>
+        </div>
+    </div>
+}*@

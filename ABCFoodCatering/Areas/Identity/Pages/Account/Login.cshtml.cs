@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+//using Microsoft.AspNetCore.Mvc.Controller
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 
@@ -47,6 +48,10 @@ namespace ABCFoodCatering.Areas.Identity.Pages.Account
 
             [Display(Name = "Remember me?")]
             public bool RememberMe { get; set; }
+            public string ReturnUrl { get; set; }
+
+            // Use external Login
+            public IList<AuthenticationScheme> ExternalLogins { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -66,8 +71,6 @@ namespace ABCFoodCatering.Areas.Identity.Pages.Account
             ReturnUrl = returnUrl;
         }
 
-        //[HttpPost]
-        //[Authorize(Roles = "Client")]
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl = returnUrl ?? Url.Content("~/Identity/Account/Manage");
@@ -101,6 +104,30 @@ namespace ABCFoodCatering.Areas.Identity.Pages.Account
 
             // If we got this far, something failed, redisplay form
             return Page();
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> Login(string returnUrl)
+        {
+            InputModel model = new InputModel
+            {
+                ReturnUrl = returnUrl,
+                ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList()
+            };
+            return Page();
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public IActionResult ExternalLogin(string provider, string returnUrl)
+        {
+            var redirectUrl = Url.Action("ExternalLoginCallback", "Account",
+                                    new { ReturnUrl = returnUrl });
+
+            var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+
+            return new ChallengeResult(provider, properties);
         }
     }
 }

@@ -70,15 +70,13 @@
             <td>
                 @if (item.orderCompleted == true)
                 {
-                    <a asp-page="./EditOrder" asp-route-id="@item.OrderID" style="display:none">Edit</a>
-                    <a asp-page="./Details" asp-route-id="@item.OrderID">Details</a>
-                    <a asp-page="./Delete" asp-route-id="@item.OrderID" style="display:none">Delete</a>
+                    <a asp-page="./OrderDetails" asp-route-id="@item.OrderID" class="btn btn-info">Order Details</a>
+                    <a asp-page="./CancelOrder" asp-route-id="@item.OrderID" style="display:none">Cancel Order</a>
                 }
                 else
                 {
-                    <a asp-page="./EditOrder" asp-route-id="@item.OrderID" class="btn btn-warning">Edit</a>
-                    <a asp-page="./Details" asp-route-id="@item.OrderID">Details</a>
-                    <a asp-page="./Delete" asp-route-id="@item.OrderID">Delete</a>
+                    <a asp-page="./OrderDetails" asp-route-id="@item.OrderID" class="btn btn-info">Order Details</a>
+                    <a asp-page="./CancelOrder" asp-route-id="@item.OrderID" class="btn btn-danger">Cancel Order</a>
                 }
             </td>
         </tr>

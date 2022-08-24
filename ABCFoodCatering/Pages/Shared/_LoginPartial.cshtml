@@ -46,9 +46,11 @@ else if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
     <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })" method="post" id="logoutForm" class="navbar-right">
         <ul class="nav navbar-nav navbar-right">
             <li>
-                <a asp-area="Identity" asp-page="/Account/ViewAccounts" title="Manage Accounts">Manage Accounts</a>
+                <a asp-area="Identity" asp-page="/Account/ViewRoles" title="Manage Roles">Manage Roles</a>
             </li>
             <li>
+                <a asp-area="Identity" asp-page="/Account/Register" title="Register Account">Register</a>
+            </li>
             <li>
                 <a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
             </li>

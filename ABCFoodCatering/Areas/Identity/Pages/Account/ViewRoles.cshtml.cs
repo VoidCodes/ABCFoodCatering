@@ -7,8 +7,9 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace ABCFoodCatering.Areas.Identity.Pages.Account
 {
-    public class ViewAccountsModel : PageModel
+    public class ViewRolesModel : PageModel
     {
+       
         public void OnGet()
         {
 

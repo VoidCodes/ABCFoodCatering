@@ -13,7 +13,7 @@ namespace ABCFoodCatering.Models
 
     //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Client")]
     [Authorize(Roles = "Client")]
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     [AllowAnonymous]
     [Route("api/[controller]")]
     [ApiController]

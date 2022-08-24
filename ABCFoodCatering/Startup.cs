@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
@@ -141,6 +142,13 @@ namespace ABCFoodCatering
                     ValidateIssuerSigningKey = true,
                     ValidateAudience = true
                 };
+            });
+
+            // Add Google Authentication
+            services.AddAuthentication().AddGoogle(opts =>
+            {
+                opts.ClientId = "335968099662-gafg4lneqmf9v8kk6ceguv4gqcvj6ecp.apps.googleusercontent.com";
+                opts.ClientSecret = "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";
             });
 
             services.AddMvc(cfg =>
