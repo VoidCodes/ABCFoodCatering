@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace ABCFoodCatering.Controllers
 {
     //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Client")]
-    [Authorize(Roles = "Client")]
+    [Authorize(Roles = "Client,Admin")]
     //[Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]

@@ -1,15 +1,15 @@
 ﻿@page
-@*model ABCFoodCatering.Areas.Identity.Pages.Account.ViewRolesModel*@
-@*@model IEnumerable<IdentityRole>*@
+@model ABCFoodCatering.Areas.Identity.Pages.Account.ViewRolesModel
+@*@model IEnumerable<IdentityRole> *@
 @{
     ViewData["Title"] = "View Roles";
 }
 
 <h2>View Roles</h2>
 <hr />
-@*@if (Model.Any())
+@if (Model.IdentityRoles.Any())
 {
-    foreach (var role in Model)
+    foreach (var role in Model.IdentityRoles)
     {
         <div class="panel">
             <div class="panel-heading">
@@ -29,4 +29,4 @@ else
             <a class="btn bg-primary" >Create Role</a>
         </div>
     </div>
-}*@
+}

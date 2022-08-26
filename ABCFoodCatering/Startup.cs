@@ -117,6 +117,8 @@ namespace ABCFoodCatering
 
             services.AddDefaultIdentity<IdentityUser>().AddRoles<IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
 
+            //services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<AuthorizationHandlerContext>
+
             services.Configure<JWTSettings>(Configuration.GetSection("JwtSettings"));
 
             services.AddAuthentication(opts =>
@@ -147,8 +149,8 @@ namespace ABCFoodCatering
             // Add Google Authentication
             services.AddAuthentication().AddGoogle(opts =>
             {
-                opts.ClientId = "335968099662-gafg4lneqmf9v8kk6ceguv4gqcvj6ecp.apps.googleusercontent.com";
-                opts.ClientSecret = "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";
+                opts.ClientId = Configuration["GoogleSettings:ClientID"];
+                opts.ClientSecret = Configuration["GoogleSettings:ClientSecret"];
             });
 
             services.AddMvc(cfg =>

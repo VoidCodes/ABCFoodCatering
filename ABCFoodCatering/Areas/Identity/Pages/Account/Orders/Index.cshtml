@@ -72,14 +72,14 @@
                     @if (item.orderCompleted == true)
                     {
                         <a asp-page="./Edit" asp-route-id="@item.OrderID" class="btn btn-warning" style="display:none">Edit</a>
-                        <a asp-page="./Details" asp-route-id="@item.OrderID" class="btn btn-info">Details</a>
-                        <a asp-page="./Delete" asp-route-id="@item.OrderID" class="btn btn-danger" style="display:none">Delete</a>
+                        <a asp-page="./Details" asp-route-id="@item.OrderID" class="btn btn-info">Order Details</a>
+                        <a asp-page="./Delete" asp-route-id="@item.OrderID" class="btn btn-danger" style="display:none">Delete Order</a>
                     }
                     else
                     {
                         <a asp-page="./Edit" asp-route-id="@item.OrderID" class="btn btn-warning">Edit</a>
-                        <a asp-page="./Details" asp-route-id="@item.OrderID" class="btn btn-info">Details</a>
-                        <a asp-page="./Delete" asp-route-id="@item.OrderID" class="btn btn-danger">Delete</a>
+                        <a asp-page="./Details" asp-route-id="@item.OrderID" class="btn btn-info">Order Details</a>
+                        <a asp-page="./Delete" asp-route-id="@item.OrderID" class="btn btn-danger">Delete Order</a>
                     }
                 </td>
             </tr>

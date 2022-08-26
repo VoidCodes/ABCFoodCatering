@@ -12,7 +12,7 @@ namespace ABCFoodCatering.Test
         public void ChangeFoodDesc()
         {
             // Arrange
-            var orderDesc = new Order { FoodDescription = "Food Test 55" /*, Quantity = 2*/};
+            var orderDesc = new Order { FoodDescription = "Food Test 55" };
             // Act
             orderDesc.FoodDescription = "New Food Item 60";
             // Assert
